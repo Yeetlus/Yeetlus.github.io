@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Clock</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    #clocks {
+        display: flex;
+        justify-content: center;
+    }
+    .clock {
+        margin: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 200px;
+    }
+</style>
+</head>
+<body>
+<h1>World Clock</h1>
+<div id="clocks"></div>
+
+<script>
+function getTime(zone, displayId) {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000; // Convert minutes to milliseconds
+    const localTime = now.getTime() + offset;
+    const targetTime = localTime + (zone * 3600000); // Convert hours to milliseconds
+
+    const targetDate = new Date(targetTime);
+    const hours = targetDate.getHours();
+    const minutes = targetDate.getMinutes();
+    const seconds = targetDate.getSeconds();
+
+    document.getElementById(displayId).innerText = `${hours}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+function pad(num) {
+    return num < 10 ? '0' + num : num;
+}
+
+// Define time zones
+const timeZones = [
+    { name: 'New York', offset: -5 },
+    { name: 'London', offset: 0 },
+    { name: 'Tokyo', offset: 9 }
+];
+
+// Create clock elements
+const clocksContainer = document.getElementById('clocks');
+timeZones.forEach(zone => {
+    const clockDiv = document.createElement('div');
+    clockDiv.classList.add('clock');
+    clockDiv.innerHTML = `<h2>${zone.name}</h2><div id="${zone.name.replace(/\s+/g, '-').toLowerCase()}"></div>`;
+    clocksContainer.appendChild(clockDiv);
+});
+
+// Update clocks every second
+setInterval(() => {
+    timeZones.forEach(zone => {
+        getTime(zone.offset, zone.name.replace(/\s+/g, '-').toLowerCase());
+    });
+}, 1000);
+
+// Initial update
+timeZones.forEach(zone => {
+    getTime(zone.offset, zone.name.replace(/\s+/g, '-').toLowerCase());
+});
+</script>
+</body>
+</html>
