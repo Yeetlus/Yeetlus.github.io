@@ -26,9 +26,12 @@
 </div>
 
 <script>
+    // Proxy server URL to bypass CORS restrictions
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    // MetaWeather API URL for London, UK
     const apiUrl = 'https://www.metaweather.com/api/location/44418/';
     
-    fetch(apiUrl)
+    fetch(proxyUrl + apiUrl)
         .then(response => response.json())
         .then(data => {
             const widget = document.getElementById('weather-widget');
